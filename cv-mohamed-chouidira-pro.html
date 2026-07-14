@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed Chouidira - CV Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --bg2: #111827;
+            --bg3: #1a2236;
+            --card: rgba(99, 102, 241, 0.04);
+            --card-border: rgba(99, 102, 241, 0.15);
+            --card-border-hover: rgba(129, 140, 248, 0.35);
+            --accent: #818cf8;
+            --accent2: #fbbf24;
+            --accent3: #c4b5fd;
+            --fg: #f1f5f9;
+            --muted: #94a3b8;
+            --danger: #f87171;
+            --info: #38bdf8;
+            --success: #34d399;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        html[dir="ltr"] body { font-family: 'Outfit', 'Cairo', sans-serif; }
+
+        .bg-scene {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse 700px 500px at 15% 15%, rgba(129,140,248,0.12), transparent),
+                radial-gradient(ellipse 600px 600px at 85% 70%, rgba(251,191,36,0.06), transparent),
+                radial-gradient(ellipse 900px 700px at 50% 50%, rgba(196,181,253,0.05), transparent);
+        }
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.025;
+            background-image:
+                linear-gradient(rgba(129,140,248,0.6) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(129,140,248,0.6) 1px, transparent 1px);
+            background-size: 64px 64px;
+        }
+
+        .top-bar {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(10,14,26,0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .brand-logo {
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer; padding: 6px 10px; border-radius: 10px;
+            transition: all 0.25s; user-select: none;
+        }
+        .brand-logo:hover {
+            background: rgba(129,140,248,0.08);
+            transform: translateY(-1px);
+        }
+        .brand-logo:active { transform: translateY(0); }
+        .brand-logo-icon {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent3));
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(129,140,248,0.4);
+            color: #fff;
+        }
+        .brand-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800; font-size: 17px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(196,181,253,0.02));
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(129,140,248,0.4), transparent);
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .glass-card:hover {
+            border-color: var(--card-border-hover);
+            box-shadow: 0 8px 30px rgba(99,102,241,0.12), 0 0 0 1px rgba(129,140,248,0.1);
+            transform: translateY(-3px);
+        }
+        .glass-card:hover::before { opacity: 1; }
+
+        [data-editable] {
+            outline: none;
+            border-radius: 6px;
+            padding: 3px 6px;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .edit-mode [data-editable]:hover {
+            background: rgba(129,140,248,0.1);
+            box-shadow: 0 0 0 1px rgba(129,140,248,0.4);
+            cursor: text;
+        }
+        .edit-mode [data-editable]:focus {
+            background: rgba(129,140,248,0.15);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .edit-controls { display: none; }
+        .edit-mode .edit-controls { display: flex; }
+
+        .btn-icon {
+            width: 32px; height: 32px; border-radius: 10px; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s; font-size: 13px;
+        }
+        .btn-icon.add { background: rgba(129,140,248,0.18); color: var(--accent); }
+        .btn-icon.add:hover { background: rgba(129,140,248,0.35); transform: scale(1.05); }
+        .btn-icon.del { background: rgba(248,113,113,0.12); color: var(--danger); }
+        .btn-icon.del:hover { background: rgba(248,113,113,0.25); }
+        .btn-icon.link { background: rgba(56,189,248,0.12); color: var(--info); }
+        .btn-icon.link:hover { background: rgba(56,189,248,0.25); }
+
+        .lang-btn {
+            padding: 7px 16px; border-radius: 10px; border: 1px solid transparent;
+            background: transparent; color: var(--muted); cursor: pointer;
+            font-family: inherit; font-size: 13px; font-weight: 600;
+            transition: all 0.25s;
+        }
+        .lang-btn:hover { color: var(--fg); background: rgba(255,255,255,0.05); }
+        .lang-btn.active {
+            color: var(--accent); border-color: rgba(129,140,248,0.5);
+            background: rgba(129,140,248,0.1);
+            box-shadow: 0 2px 8px rgba(129,140,248,0.15);
+        }
+
+        .skill-tag {
+            padding: 9px 18px; border-radius: 12px; font-size: 14px; font-weight: 500;
+            background: linear-gradient(135deg, rgba(129,140,248,0.08), rgba(196,181,253,0.04));
+            border: 1px solid rgba(129,140,248,0.18);
+            color: var(--fg); transition: all 0.3s; position: relative;
+        }
+        .skill-tag:hover {
+            background: linear-gradient(135deg, rgba(129,140,248,0.16), rgba(196,181,253,0.08));
+            border-color: rgba(129,140,248,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+        }
+
+        .ach-icon {
+            width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(251,191,36,0.04));
+            color: var(--accent2);
+            border: 1px solid rgba(251,191,36,0.2);
+        }
+
+        .timeline-item { position: relative; }
+        .timeline-dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--accent); flex-shrink: 0;
+            box-shadow: 0 0 14px rgba(129,140,248,0.5), 0 0 0 4px rgba(129,140,248,0.1);
+            position: relative; z-index: 2;
+        }
+        .timeline-line {
+            position: absolute; top: 14px; bottom: -20px;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(129,140,248,0.3), rgba(129,140,248,0.05));
+        }
+        html[dir="rtl"] .timeline-line { right: 6px; }
+        html[dir="ltr"] .timeline-line { left: 6px; }
+
+        .avatar-ring {
+            width: 160px; height: 160px; border-radius: 50%; padding: 4px;
+            background: conic-gradient(from 180deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+            position: relative; flex-shrink: 0;
+            animation: rotate-ring 8s linear infinite;
+        }
+        @keyframes rotate-ring { to { transform: rotate(360deg); } }
+        .avatar-ring img {
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--bg);
+            animation: rotate-ring 8s linear infinite reverse;
+        }
+        .avatar-edit {
+            position: absolute; inset: 4px; border-radius: 50%;
+            background: rgba(0,0,0,0.65); display: none;
+            align-items: center; justify-content: center;
+            cursor: pointer; color: white; font-size: 22px;
+            transition: background 0.2s;
+        }
+        .avatar-edit:hover { background: rgba(0,0,0,0.85); }
+        .edit-mode .avatar-edit { display: flex; }
+
+        .custom-section .glass-card { border-color: rgba(251,191,36,0.18); }
+        .custom-section .glass-card:hover { border-color: rgba(251,191,36,0.35); }
+
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(120px);
+            padding: 14px 28px; border-radius: 14px; font-size: 14px; font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), var(--accent3));
+            color: #fff; z-index: 999;
+            backdrop-filter: blur(10px); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error {
+            background: linear-gradient(135deg, var(--danger), #ef4444);
+            box-shadow: 0 8px 24px rgba(248,113,113,0.3);
+        }
+        .toast.success {
+            background: linear-gradient(135deg, var(--success), #10b981);
+            box-shadow: 0 8px 24px rgba(52,211,153,0.3);
+        }
+
+        /* روابط الفيديوهات والمقالات */
+        .link-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 7px 14px; border-radius: 10px;
+            font-size: 12px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s;
+            margin-top: 10px; margin-inline-end: 8px;
+        }
+        .link-btn.video {
+            background: rgba(248,113,113,0.12); color: #fca5a5;
+            border: 1px solid rgba(248,113,113,0.25);
+        }
+        .link-btn.video:hover {
+            background: rgba(248,113,113,0.22); transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(248,113,113,0.2);
+        }
+        .link-btn.article {
+            background: rgba(56,189,248,0.12); color: #7dd3fc;
+            border: 1px solid rgba(56,189,248,0.25);
+        }
+        .link-btn.article:hover {
+            background: rgba(56,189,248,0.22); transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(56,189,248,0.2);
+        }
+        .link-btn i { font-size: 11px; }
+
+        .translation-notice {
+            background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(129,140,248,0.05));
+            border: 1px solid rgba(56,189,248,0.2);
+            color: var(--info);
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 24px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        .translation-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(10,14,26,0.88); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; gap: 18px;
+        }
+        .translation-overlay.show { display: flex; }
+        .translation-overlay .spinner {
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 3px solid rgba(129,140,248,0.2);
+            border-top-color: var(--accent);
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .translation-overlay p { color: var(--muted); font-size: 14px; }
+
+        @media print {
+            .top-bar, .edit-controls, .avatar-edit, .bg-scene, .bg-grid, .toast, #particles,
+            .translation-overlay, .translation-notice, .admin-badge { display: none !important; }
+            body { background: white !important; color: #111 !important; }
+            .glass-card { border-color: #ddd !important; background: #fafafa !important; box-shadow: none !important; transform: none !important; }
+            .glass-card::before { display: none !important; }
+            .skill-tag { border-color: #ccc !important; background: #f0f0f0 !important; color: #111 !important; }
+            .ach-icon { background: #f0f0f0 !important; color: #111 !important; }
+            .timeline-dot { background: #333 !important; box-shadow: none !important; }
+            .timeline-line { background: #ccc !important; }
+            .avatar-ring { background: #333 !important; animation: none !important; }
+            .avatar-ring img { animation: none !important; }
+            * { color: #111 !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+            .link-btn { border-color: #ccc !important; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(129,140,248,0.25); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(129,140,248,0.45); }
+
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: rgba(10,14,26,0.8); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: linear-gradient(135deg, var(--bg2), var(--bg3));
+            border: 1px solid var(--card-border);
+            border-radius: 22px; padding: 36px; max-width: 520px; width: 100%;
+            max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(129,140,248,0.1);
+            position: relative;
+        }
+        .modal-box::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+            border-radius: 22px 22px 0 0;
+        }
+        .modal-input {
+            width: 100%; padding: 12px 16px; border-radius: 12px;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+            color: var(--fg); font-family: inherit; font-size: 15px; outline: none;
+            transition: all 0.2s;
+        }
+        .modal-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(129,140,248,0.15);
+        }
+        .modal-btn {
+            padding: 11px 26px; border-radius: 12px; border: none;
+            font-family: inherit; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent3));
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+        }
+        .modal-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(99,102,241,0.4);
+        }
+        .modal-btn.ghost {
+            background: transparent; color: var(--muted);
+            border: 1px solid var(--card-border);
+        }
+        .modal-btn.ghost:hover { color: var(--fg); border-color: var(--muted); }
+
+        .particle {
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* اسم بتدرج ذهبي/بنفسجي */
+        .name-glow {
+            background: linear-gradient(135deg, #c4b5fd 0%, #fbbf24 50%, #818cf8 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .field-label {
+            font-size: 12px; color: var(--muted); margin-bottom: 6px;
+            font-weight: 600; display: block;
+        }
+
+        .admin-badge {
+            display: none; align-items: center; gap: 6px;
+            padding: 5px 12px; border-radius: 8px;
+            font-size: 12px; font-weight: 700;
+            background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.08));
+            color: var(--accent2);
+            border: 1px solid rgba(251,191,36,0.3);
+        }
+        body.admin-mode .admin-badge { display: inline-flex; }
+
+        /* زر التعديل مخفي افتراضياً، يظهر فقط في وضع الأدمن */
+        #editToggle, #resetBtn { display: none !important; }
+        body.admin-mode #editToggle { display: inline-flex !important; }
+        body.admin-mode.edit-active #resetBtn { display: inline-flex !important; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .particle, .reveal { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+            .name-glow, .avatar-ring, .avatar-ring img { animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-scene"></div>
+    <div class="bg-grid"></div>
+    <div id="particles"></div>
+
+    <div class="translation-overlay" id="translationOverlay">
+        <div class="spinner"></div>
+        <p data-ui="translating">جاري الترجمة...</p>
+    </div>
+
+    <header class="top-bar">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+            <div class="brand-logo" id="brandLogo" title="CV Pro">
+                <div class="brand-logo-icon">
+                    <i class="fa-solid fa-file-lines text-sm"></i>
+                </div>
+                <span class="brand-logo-text">CV Pro</span>
+                <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <button class="lang-btn active" data-lang="ar">العربية</button>
+                <button class="lang-btn" data-lang="fr">Français</button>
+                <button class="lang-btn" data-lang="en">English</button>
+                <div style="width:1px;height:24px;background:var(--card-border);margin:0 6px;"></div>
+                <button id="editToggle" class="lang-btn" style="color:var(--accent2);">
+                    <i class="fa-solid fa-pen-to-square" style="margin-inline-end:4px;"></i>
+                    <span data-ui="editBtn">تعديل</span>
+                </button>
+                <button id="printBtn" class="lang-btn" title="طباعة">
+                    <i class="fa-solid fa-print"></i>
+                </button>
+                <button id="resetBtn" class="lang-btn" style="color:var(--danger);" title="إعادة تعيين">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent" class="max-w-5xl mx-auto px-4 py-10 relative z-10"></main>
+
+    <!-- نافذة إدخال كود الأدمن -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-box">
+            <div style="text-align:center;margin-bottom:24px;">
+                <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent3));display:inline-flex;align-items:center;justify-content:center;font-size:26px;color:#fff;box-shadow:0 8px 24px rgba(99,102,241,0.4);">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-bold mt-4 mb-1" style="font-family:'Playfair Display',serif;" data-ui="adminLoginTitle">وصول المحرر</h3>
+                <p class="text-sm" style="color:var(--muted);" data-ui="adminLoginDesc">أدخل الكود للدخول إلى وضع التحرير</p>
+            </div>
+            <input class="modal-input mb-4" id="adminCodeInput" type="password" placeholder="••••••••••" dir="ltr" style="text-align:center;letter-spacing:2px;font-size:18px;">
+            <p class="text-xs mb-4" id="adminError" style="color:var(--danger);text-align:center;display:none;">
+                <i class="fa-solid fa-circle-exclamation"></i> <span data-ui="adminErrorText">الكود غير صحيح</span>
+            </p>
+            <div class="flex gap-3 justify-end">
+                <button class="modal-btn ghost" id="cancelAdmin" data-ui="cancelBtn">إلغاء</button>
+                <button class="modal-btn primary" id="confirmAdmin"><i class="fa-solid fa-unlock" style="margin-inline-end:6px;"></i><span data-ui="loginBtn">دخول</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="addSectionModal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4" data-ui="modalTitle">إضافة قسم جديد</h3>
+            <label class="field-label" data-ui="modalPlaceholder">عنوان القسم</label>
+            <input class="modal-input mb-3" id="newSectionTitle" data-placeholder="modalPlaceholder" placeholder="عنوان القسم">
+            <label class="field-label" data-ui="modalContentPlaceholder">محتوى القسم...</label>
+            <textarea class="modal-input mb-4" id="newSectionContent" rows="4" data-placeholder="modalContentPlaceholder" placeholder="محتوى القسم..." style="resize:vertical;"></textarea>
+            <div class="flex gap-3 justify-end">
+                <button class="modal-btn ghost" id="cancelSection" data-ui="cancelBtn">إلغاء</button>
+                <button class="modal-btn primary" id="confirmSection" data-ui="addBtn">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="addItemModal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4" id="addItemTitle">إضافة عنصر</h3>
+            <div id="addItemFields" class="flex flex-col gap-3 mb-4"></div>
+            <div class="flex gap-3 justify-end">
+                <button class="modal-btn ghost" id="cancelItem" data-ui="cancelBtn">إلغاء</button>
+                <button class="modal-btn primary" id="confirmItem" data-ui="addBtn">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editLinksModal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold mb-4" data-ui="editLinksTitle">تعديل الروابط</h3>
+            <label class="field-label" data-ui="videoUrlLabel">رابط الفيديو (YouTube أو رابط مباشر)</label>
+            <input class="modal-input mb-3" id="editVideoUrl" placeholder="https://youtube.com/..." dir="ltr">
+            <label class="field-label" data-ui="videoLabelLabel">نص رابط الفيديو</label>
+            <input class="modal-input mb-3" id="editVideoLabel" data-ui-default="مشاهدة الفيديو" placeholder="مشاهدة الفيديو">
+            <label class="field-label" data-ui="articleUrlLabel">رابط المقال العلمي (IEEE، المجلة، DOI)</label>
+            <input class="modal-input mb-3" id="editArticleUrl" placeholder="https://doi.org/..." dir="ltr">
+            <label class="field-label" data-ui="articleLabelLabel">نص رابط المقال</label>
+            <input class="modal-input mb-4" id="editArticleLabel" data-ui-default="قراءة المقال" placeholder="قراءة المقال">
+            <div class="flex gap-3 justify-end">
+                <button class="modal-btn ghost" id="cancelLinks" data-ui="cancelBtn">إلغاء</button>
+                <button class="modal-btn primary" id="confirmLinks" data-ui="saveBtn">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    const AVATAR_URL = "data:image/jpeg;base64,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";
+
+    // كود الأدمن
+    const ADMIN_CODE = "procvmedso04@";
+
+    /* ========================================================
+       البيانات الأساسية - بالعربية فقط
+    ======================================================== */
+    const DEFAULT_DATA_AR = {
+        name: "محمد شويديرة",
+        title: "CHOUIDIRA MOHAMED",
+        avatar: AVATAR_URL,
+        about: "مهندس ميكانيكي حائز على دكتوراه في الطاقة، قمت بتصميم وتطوير أجهزة قياس حراري مبتكرة لدعم البحوث العلمية والتحليل الحراري، وأسعى للمساهمة في ابتكار حلول طاقوية مستدامة وعالية الأداء.",
+        experience: [
+            { role: "البحث العلمي والابتكار", company: "جامعة محمد بوضياف - المسيلة - الجزائر", period: "2014 - 2026", desc: "تصميم أجهزة تجريبية، نشر أبحاث علمية، والمشاركة في مؤتمرات دولية." },
+            { role: "التعليم الجامعي", company: "جامعة محمد بوضياف - المسيلة - الجزائر", period: "2019 - 2020", desc: "تدريس مقياس آلات التبريد (لطلبة ليسانس سنة ثالثة) ومقياس الطرق العددية (لطلبة ماستر سنة ثانية) – جامعة محمد بوضياف." },
+            { role: "التعليم الثانوي", company: "ثانوية محمد بن عبد الرحمان الديسي - بوسعادة - الجزائر", period: "2025-09 - 2025-12", desc: "تدريس مقياس الهندسة الميكانيكية." },
+            { role: "التدريب والتدريس في أكاديميات خاصة", company: "أكاديمية بن صالح بسنوسي - أكاديمية العباقرة", period: "2020 - 2025", desc: "إدارة أكاديمية بن صالح بسنوسي (2020–2021) وتدريس برمجة الروبوتات في أكاديمية العباقرة (2025)." },
+            { role: "العمل التطوعي", company: "منصة حاضنة عمران", period: "2023 - 2025", desc: "عضو في فريق القسم التقني للمنصة." }
+        ],
+        education: [
+            { degree: "دكتوراه في الهندسة الميكانيكية - طاقوية", institution: "جامعة محمد بوضياف - المسيلة - الجزائر", period: "2014 - 2024", desc: "تخرج بتقدير مشرف جداً مع تهنئة أعضاء لجنة المناقشة. عنوان الأطروحة: دراسة الخصائص الحرارية والميكانيكية لمواد البناء." }
+        ],
+        skills: ["SW", "CATIA", "SOLIDWORKS", "SKETCHUP", "GAMBIT", "FLUENT", "ANSYS", "HTML", "C++", "ARDUINO", "WORD", "EXCEL", "إتقان اللغة الفرنسية 60%", "إتقان اللغة العربية 100%", "إتقان اللغة الإنجليزية 40%"],
+        achievements: [
+            {
+                title: "براءة اختراع وطنية مسلمة من المركز الوطني للملكية الفكرية INAPI تحت رقم 11637",
+                desc: "جهاز قياس الإشعاع الشمسي حسب الاتجاهات والميلانات المختلفة.",
+                icon: "trophy",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "4 شهادات مشروع مبتكر مسلمة من وزارة المؤسسات الناشئة واقتصاد المعرفة - الجزائر",
+                desc: "جهاز قياس وتخزين قيم درجة الحرارة DMST1.0، جهاز محلل كمي ونوعي للناقلية الحرارية للمواد الصلبة والمعادن، جهاز دراسة الخصائص الحرارية لمواد البناء متصل بحاسوب، نظام مضاد للسرقة للمركبات والشاحنات، دعامة قرآنية تفاعلية مع تفسير صوتي مخصصة للمكفوفين والمبصرين. تحت الأرقام التسلسلية: 0804212080 – 2106212198 – 2705212153 – 2607212229 – 1702522295.",
+                icon: "certificate",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "مقال في مجلة علمية عالمية (JREE)",
+                desc: "دراسة تجريبية حول تأثير اتجاه وميلان السطح على الإشعاع الشمسي الساقط وتطبيقه على المباني.",
+                icon: "rocket",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "مقال في مجلة علمية عالمية (RE&PQJ)",
+                desc: "تأثير مواد البناء على تطور درجة الحرارة داخل المباني في الجزائر.",
+                icon: "rocket",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "نشر بحث على منصة (IEEE)",
+                desc: "تأثير الإشعاع الشمسي على درجة حرارة جدران المنازل المواجهة للاتجاهات الأربعة في فصل الصيف في أولاد سيدي إبراهيم (الجزائر).",
+                icon: "code-branch",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "نشر فصل في كتاب (Trends in Renewable Energy and Power Quality) إصدار جامعة كامبريدج 2024",
+                desc: "الفصل الرابع والثلاثون: تأثير مواد البناء على تطور درجة الحرارة الداخلية في الجزائر.",
+                icon: "code-branch",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            },
+            {
+                title: "المشاركات الدولية",
+                desc: "المشاركة في 4 ملتقيات دولية: المؤتمر الدولي الثالث عشر للطاقة المتجددة (IREC 2022)، الدورة السابعة للمؤتمر الدولي في العلوم الحرارية (AMT 2022)، المؤتمر العربي الثاني في الميكانيك والهندسة (ARCME 2023)، اللقاء الدولي حول التبريد والطاقة والبيئة (IREEC 2).",
+                icon: "globe",
+                videoUrl: "", videoLabel: "",
+                articleUrl: "", articleLabel: ""
+            }
+        ],
+        contact: { email: "hammach0408@gmail.com", phone: "+213 793 192 504 / +213 784 373 784", location: "بوسعادة - المسيلة - الجزائر", linkedin: "linkedin.com/in/dr-chouidira-mohamed-6963603a3" },
+        customSections: []
+    };
+
+    /* ========================================================
+       ترجمة يدوية لبعض الحقول لتجنب أخطاء Google Translate
+       الاسم الصحيح بالإنجليزية: Mohamed Chouidira (وليس Mohammed Shwedira)
+    ======================================================== */
+    const MANUAL_TRANSLATIONS = {
+        en: {
+            "محمد شويديرة": "Mohamed Chouidira",
+            "CHOUIDIRA MOHAMED": "CHOUIDIRA MOHAMED"
+        },
+        fr: {
+            "محمد شويديرة": "Mohamed Chouidira",
+            "CHOUIDIRA MOHAMED": "CHOUIDIRA MOHAMED"
+        }
+    };
+
+    /* ========================================================
+       نصوص الواجهة
+    ======================================================== */
+    const UI_TEXTS = {
+        ar: {
+            editBtn: "تعديل", saveBtn: "حفظ", about: "نبذة عني", experience: "الخبرات المهنية",
+            education: "التعليم", skills: "المهارات", achievements: "الإنجازات", contact: "تواصل معي",
+            addExp: "إضافة خبرة", addEdu: "إضافة تعليم", addSkill: "إضافة مهارة", addAch: "إضافة إنجاز",
+            addSection: "إضافة قسم", modalTitle: "إضافة قسم جديد", modalPlaceholder: "عنوان القسم",
+            modalContentPlaceholder: "محتوى القسم...", cancelBtn: "إلغاء", addBtn: "إضافة",
+            saved: "تم الحفظ بنجاح", reset: "تم إعادة التعيين",
+            role: "المسمى الوظيفي", company: "الشركة", period: "الفترة", desc: "الوصف",
+            degree: "الدرجة العلمية", institution: "المؤسسة", skillName: "اسم المهارة",
+            achTitle: "عنوان الإنجاز", achDesc: "وصف الإنجاز",
+            videoUrlLabel: "رابط الفيديو (YouTube أو رابط مباشر)",
+            articleUrlLabel: "رابط المقال العلمي (IEEE، المجلة، DOI)",
+            videoLabelLabel: "نص رابط الفيديو",
+            articleLabelLabel: "نص رابط المقال",
+            editLinksTitle: "تعديل الروابط", editLinks: "تعديل الروابط",
+            watchVideo: "مشاهدة الفيديو", readArticle: "قراءة المقال",
+            translating: "جاري الترجمة...",
+            autoTranslatedNotice: "هذا المحتوى مترجم تلقائياً من العربية. للتعديل انتقل إلى اللغة العربية.",
+            adminLoginTitle: "وصول المحرر",
+            adminLoginDesc: "أدخل الكود للدخول إلى وضع التحرير",
+            adminErrorText: "الكود غير صحيح",
+            loginBtn: "دخول",
+            adminWelcome: "تم تفعيل وضع التحرير",
+            adminLogout: "تم الخروج من وضع التحرير"
+        },
+        en: {
+            editBtn: "Edit", saveBtn: "Save", about: "About Me", experience: "Experience",
+            education: "Education", skills: "Skills", achievements: "Achievements", contact: "Contact",
+            addExp: "Add Experience", addEdu: "Add Education", addSkill: "Add Skill", addAch: "Add Achievement",
+            addSection: "Add Section", modalTitle: "Add New Section", modalPlaceholder: "Section Title",
+            modalContentPlaceholder: "Section content...", cancelBtn: "Cancel", addBtn: "Add",
+            saved: "Saved successfully", reset: "Data has been reset",
+            role: "Role", company: "Company", period: "Period", desc: "Description",
+            degree: "Degree", institution: "Institution", skillName: "Skill Name",
+            achTitle: "Achievement Title", achDesc: "Achievement Description",
+            videoUrlLabel: "Video link (YouTube or direct URL)",
+            articleUrlLabel: "Scientific article link (IEEE, journal, DOI)",
+            videoLabelLabel: "Video link text",
+            articleLabelLabel: "Article link text",
+            editLinksTitle: "Edit Links", editLinks: "Edit Links",
+            watchVideo: "Watch Video", readArticle: "Read Article",
+            translating: "Translating...",
+            autoTranslatedNotice: "This content is automatically translated from Arabic. Switch to Arabic to edit.",
+            adminLoginTitle: "Editor Access",
+            adminLoginDesc: "Enter the code to access editing mode",
+            adminErrorText: "Incorrect code",
+            loginBtn: "Login",
+            adminWelcome: "Editing mode enabled",
+            adminLogout: "Editing mode disabled"
+        },
+        fr: {
+            editBtn: "Modifier", saveBtn: "Enregistrer", about: "À propos de moi", experience: "Expérience",
+            education: "Formation", skills: "Compétences", achievements: "Réalisations", contact: "Contact",
+            addExp: "Ajouter expérience", addEdu: "Ajouter formation", addSkill: "Ajouter compétence", addAch: "Ajouter réalisation",
+            addSection: "Ajouter section", modalTitle: "Ajouter une nouvelle section", modalPlaceholder: "Titre de la section",
+            modalContentPlaceholder: "Contenu de la section...", cancelBtn: "Annuler", addBtn: "Ajouter",
+            saved: "Enregistré avec succès", reset: "Données réinitialisées",
+            role: "Poste", company: "Entreprise", period: "Période", desc: "Description",
+            degree: "Diplôme", institution: "Établissement", skillName: "Compétence",
+            achTitle: "Titre de la réalisation", achDesc: "Description de la réalisation",
+            videoUrlLabel: "Lien vidéo (YouTube ou URL directe)",
+            articleUrlLabel: "Lien de l'article scientifique (IEEE, revue, DOI)",
+            videoLabelLabel: "Texte du lien vidéo",
+            articleLabelLabel: "Texte du lien de l'article",
+            editLinksTitle: "Modifier les liens", editLinks: "Modifier les liens",
+            watchVideo: "Voir la vidéo", readArticle: "Lire l'article",
+            translating: "Traduction en cours...",
+            autoTranslatedNotice: "Ce contenu est traduit automatiquement depuis l'arabe. Passez en arabe pour modifier.",
+            adminLoginTitle: "Accès Éditeur",
+            adminLoginDesc: "Entrez le code pour accéder au mode édition",
+            adminErrorText: "Code incorrect",
+            loginBtn: "Connexion",
+            adminWelcome: "Mode édition activé",
+            adminLogout: "Mode édition désactivé"
+        }
+    };
+
+    let currentLang = 'ar';
+    let editMode = false;
+    let isAdmin = false;
+    let data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
+    let currentItemSection = null;
+    let currentEditLinksIndex = null;
+    let isTranslating = false;
+    let translationCache = {};
+
+    /* ========================================================
+       إدارة البيانات
+    ======================================================== */
+    function loadData() {
+        const saved = localStorage.getItem('cvProData_v5');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.ar) {
+                    data = { ar: parsed.ar };
+                } else {
+                    data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
+                }
+            } catch(e) {
+                data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
+            }
+        } else {
+            data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
+        }
+        if (!data.ar.customSections) data.ar.customSections = [];
+        // التأكد من وجود حقول الروابط في كل إنجاز
+        if (data.ar.achievements) {
+            data.ar.achievements.forEach(ach => {
+                if (!ach.videoUrl) ach.videoUrl = '';
+                if (!ach.videoLabel) ach.videoLabel = '';
+                if (!ach.articleUrl) ach.articleUrl = '';
+                if (!ach.articleLabel) ach.articleLabel = '';
+            });
+        }
+
+        try {
+            const cacheStr = localStorage.getItem('cvProTranslationCache_v3');
+            if (cacheStr) translationCache = JSON.parse(cacheStr);
+        } catch(e) { translationCache = {}; }
+    }
+
+    function saveData() {
+        localStorage.setItem('cvProData_v5', JSON.stringify({ ar: data.ar }));
+    }
+
+    function saveTranslationCache() {
+        try {
+            localStorage.setItem('cvProTranslationCache_v3', JSON.stringify(translationCache));
+        } catch(e) {
+            const keys = Object.keys(translationCache);
+            keys.slice(0, Math.floor(keys.length / 2)).forEach(k => delete translationCache[k]);
+            try { localStorage.setItem('cvProTranslationCache_v3', JSON.stringify(translationCache)); } catch(e2) {}
+        }
+    }
+
+    function resetData() {
+        localStorage.removeItem('cvProData_v5');
+        localStorage.removeItem('cvProTranslationCache_v3');
+        translationCache = {};
+        data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
+        render();
+        showToast(UI_TEXTS[currentLang].reset, 'success');
+    }
+
+    function showToast(msg, type = '') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast show' + (type ? ' ' + type : '');
+        setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    /* ========================================================
+       نظام الترجمة
+    ======================================================== */
+    function hashKey(text, targetLang) {
+        return targetLang + '::' + text.substring(0, 200);
+    }
+
+    async function translateChunk(text, targetLang) {
+        if (!text || !text.trim()) return text;
+        if (targetLang === 'ar') return text;
+
+        // الترجمة اليدوية أولاً
+        if (MANUAL_TRANSLATIONS[targetLang] && MANUAL_TRANSLATIONS[targetLang][text]) {
+            return MANUAL_TRANSLATIONS[targetLang][text];
+        }
+
+        const cacheKey = hashKey(text, targetLang);
+        if (translationCache[cacheKey] !== undefined) {
+            return translationCache[cacheKey];
+        }
+
+        const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ar&tl=' + targetLang + '&dt=t&q=' + encodeURIComponent(text);
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            const json = await response.json();
+            let translated = '';
+            if (json && json[0]) {
+                for (const part of json[0]) {
+                    if (part && part[0]) translated += part[0];
+                }
+            }
+            if (translated) {
+                translationCache[cacheKey] = translated;
+                return translated;
+            }
+            return text;
+        } catch(e) {
+            console.warn('Translation failed:', e);
+            return text;
+        }
+    }
+
+    async function translateAll(texts, targetLang) {
+        const results = new Array(texts.length);
+        const batchSize = 5;
+        for (let i = 0; i < texts.length; i += batchSize) {
+            const batch = texts.slice(i, i + batchSize);
+            const promises = batch.map((t, idx) => translateChunk(t, targetLang).then(r => { results[i + idx] = r; }));
+            await Promise.all(promises);
+        }
+        return results;
+    }
+
+    async function getTranslatedData(targetLang) {
+        if (targetLang === 'ar') return data.ar;
+
+        const ar = data.ar;
+        const textsToTranslate = [];
+        const indices = {};
+
+        function addText(text) {
+            if (text && text.trim()) {
+                textsToTranslate.push(text);
+                return textsToTranslate.length - 1;
+            }
+            return -1;
+        }
+
+        indices.name = addText(ar.name);
+        indices.title = addText(ar.title);
+        indices.about = addText(ar.about);
+
+        indices.experience = ar.experience.map(exp => ({
+            role: addText(exp.role),
+            company: addText(exp.company),
+            period: addText(exp.period),
+            desc: addText(exp.desc)
+        }));
+
+        indices.education = ar.education.map(edu => ({
+            degree: addText(edu.degree),
+            institution: addText(edu.institution),
+            period: addText(edu.period),
+            desc: addText(edu.desc)
+        }));
+
+        indices.skills = ar.skills.map(s => addText(s));
+
+        indices.achievements = ar.achievements.map(ach => ({
+            title: addText(ach.title),
+            desc: addText(ach.desc),
+            // ترجمة نصوص الروابط المخصصة (إن وجدت)
+            videoLabel: addText(ach.videoLabel),
+            articleLabel: addText(ach.articleLabel)
+        }));
+
+        indices.contact = { location: addText(ar.contact.location) };
+
+        indices.customSections = ar.customSections.map(sec => ({
+            title: addText(sec.title),
+            content: addText(sec.content)
+        }));
+
+        const translatedTexts = await translateAll(textsToTranslate, targetLang);
+        saveTranslationCache();
+
+        function getT(idx) {
+            return idx >= 0 ? (translatedTexts[idx] || textsToTranslate[idx]) : '';
+        }
+
+        return {
+            name: getT(indices.name),
+            title: getT(indices.title),
+            about: getT(indices.about),
+            avatar: ar.avatar,
+            experience: ar.experience.map((exp, i) => ({
+                role: getT(indices.experience[i].role),
+                company: getT(indices.experience[i].company),
+                period: getT(indices.experience[i].period),
+                desc: getT(indices.experience[i].desc)
+            })),
+            education: ar.education.map((edu, i) => ({
+                degree: getT(indices.education[i].degree),
+                institution: getT(indices.education[i].institution),
+                period: getT(indices.education[i].period),
+                desc: getT(indices.education[i].desc)
+            })),
+            skills: ar.skills.map((s, i) => getT(indices.skills[i])),
+            achievements: ar.achievements.map((ach, i) => ({
+                title: getT(indices.achievements[i].title),
+                desc: getT(indices.achievements[i].desc),
+                icon: ach.icon,
+                videoUrl: ach.videoUrl || '',
+                videoLabel: getT(indices.achievements[i].videoLabel),
+                articleUrl: ach.articleUrl || '',
+                articleLabel: getT(indices.achievements[i].articleLabel)
+            })),
+            contact: {
+                email: ar.contact.email,
+                phone: ar.contact.phone,
+                location: getT(indices.contact.location),
+                linkedin: ar.contact.linkedin
+            },
+            customSections: ar.customSections.map((sec, i) => ({
+                title: getT(indices.customSections[i].title),
+                content: getT(indices.customSections[i].content)
+            }))
+        };
+    }
+
+    /* ========================================================
+       العرض
+    ======================================================== */
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function renderAchievementLinks(ach, ui) {
+        let html = '';
+        if (ach.videoUrl && ach.videoUrl.trim()) {
+            const url = ach.videoUrl.trim();
+            const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+            const icon = isYouTube ? 'fa-youtube' : 'fa-play';
+            // استخدام النص المخصص إن وجد، وإلا استخدام النص الافتراضي
+            let label = ach.videoLabel && ach.videoLabel.trim() ? ach.videoLabel : ui.watchVideo;
+            html += `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="link-btn video"><i class="fa-brands ${icon}"></i><span>${escapeHtml(label)}</span></a>`;
+        }
+        if (ach.articleUrl && ach.articleUrl.trim()) {
+            const url = ach.articleUrl.trim();
+            let label = ach.articleLabel && ach.articleLabel.trim() ? ach.articleLabel : ui.readArticle;
+            html += `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="link-btn article"><i class="fa-solid fa-file-lines"></i><span>${escapeHtml(label)}</span></a>`;
+        }
+        return html;
+    }
+
+    function buildHTML(d, ui, isRTL) {
+        const canEdit = isAdmin && currentLang === 'ar';
+        const editAttr = canEdit ? 'data-editable' : '';
+
+        return `
+            ${currentLang !== 'ar' ? `
+                <div class="translation-notice reveal">
+                    <i class="fa-solid fa-language"></i>
+                    <span>${ui.autoTranslatedNotice}</span>
+                </div>
+            ` : ''}
+
+            <section class="reveal glass-card p-8 mb-8 flex flex-col md:flex-row items-center gap-8">
+                <div class="avatar-ring">
+                    <img src="${escapeHtml(d.avatar)}" alt="${escapeHtml(d.name)}" id="avatarImg">
+                    ${canEdit ? `
+                    <label class="avatar-edit" for="avatarInput">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                    ` : ''}
+                </div>
+                <div class="text-center md:text-${isRTL ? 'right' : 'left'} flex-1">
+                    <h1 class="text-3xl md:text-4xl font-black mb-2 name-glow" style="line-height:1.3;font-family:'Playfair Display','Cairo',serif;" ${editAttr}="name">${escapeHtml(d.name)}</h1>
+                    <p class="text-lg font-medium mb-4" style="color:var(--accent);letter-spacing:1px;" ${editAttr}="title">${escapeHtml(d.title)}</p>
+                    <p class="leading-relaxed" style="color:var(--muted);max-width:600px;" ${editAttr}="about">${escapeHtml(d.about)}</p>
+                </div>
+            </section>
+
+            <section class="reveal mb-8">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold flex items-center gap-3" style="font-family:'Playfair Display','Cairo',serif;">
+                        <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent),var(--accent3));display:inline-block;"></span>
+                        ${ui.experience}
+                    </h2>
+                    <div class="edit-controls">
+                        <button class="btn-icon add" onclick="openAddItemModal('experience')" title="${ui.addExp}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    ${d.experience.map((exp, i) => `
+                        <div class="glass-card p-6 timeline-item" data-section="experience" data-index="${i}">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center pt-1">
+                                    <div class="timeline-dot"></div>
+                                    ${i < d.experience.length - 1 ? '<div class="timeline-line"></div>' : ''}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between gap-3 flex-wrap">
+                                        <div>
+                                            <h3 class="font-bold text-lg" ${editAttr}="experience.${i}.role">${escapeHtml(exp.role)}</h3>
+                                            <p class="text-sm font-medium mt-1" style="color:var(--accent);" ${editAttr}="experience.${i}.company">${escapeHtml(exp.company)}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-medium px-3 py-1 rounded-full" style="background:rgba(129,140,248,0.1);color:var(--accent);border:1px solid rgba(129,140,248,0.2);" ${editAttr}="experience.${i}.period">${escapeHtml(exp.period)}</span>
+                                            <div class="edit-controls">
+                                                <button class="btn-icon del" onclick="removeItem('experience',${i})"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 text-sm leading-relaxed" style="color:var(--muted);" ${editAttr}="experience.${i}.desc">${escapeHtml(exp.desc)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="reveal mb-8">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold flex items-center gap-3" style="font-family:'Playfair Display','Cairo',serif;">
+                        <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent2),#f59e0b);display:inline-block;"></span>
+                        ${ui.education}
+                    </h2>
+                    <div class="edit-controls">
+                        <button class="btn-icon add" onclick="openAddItemModal('education')" title="${ui.addEdu}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    ${d.education.map((edu, i) => `
+                        <div class="glass-card p-6 timeline-item" data-section="education" data-index="${i}">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center pt-1">
+                                    <div class="timeline-dot" style="background:var(--accent2);box-shadow:0 0 14px rgba(251,191,36,0.5),0 0 0 4px rgba(251,191,36,0.1);"></div>
+                                    ${i < d.education.length - 1 ? '<div class="timeline-line" style="background:linear-gradient(to bottom,rgba(251,191,36,0.3),rgba(251,191,36,0.05));"></div>' : ''}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between gap-3 flex-wrap">
+                                        <div>
+                                            <h3 class="font-bold text-lg" ${editAttr}="education.${i}.degree">${escapeHtml(edu.degree)}</h3>
+                                            <p class="text-sm font-medium mt-1" style="color:var(--accent2);" ${editAttr}="education.${i}.institution">${escapeHtml(edu.institution)}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-medium px-3 py-1 rounded-full" style="background:rgba(251,191,36,0.1);color:var(--accent2);border:1px solid rgba(251,191,36,0.2);" ${editAttr}="education.${i}.period">${escapeHtml(edu.period)}</span>
+                                            <div class="edit-controls">
+                                                <button class="btn-icon del" onclick="removeItem('education',${i})"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-3 text-sm leading-relaxed" style="color:var(--muted);" ${editAttr}="education.${i}.desc">${escapeHtml(edu.desc)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="reveal mb-8">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold flex items-center gap-3" style="font-family:'Playfair Display','Cairo',serif;">
+                        <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent),var(--accent3));display:inline-block;"></span>
+                        ${ui.skills}
+                    </h2>
+                    <div class="edit-controls">
+                        <button class="btn-icon add" onclick="openAddItemModal('skills')" title="${ui.addSkill}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    ${d.skills.map((skill, i) => `
+                        <div class="skill-tag flex items-center gap-2" data-section="skills" data-index="${i}">
+                            <span ${editAttr}="skills.${i}">${escapeHtml(skill)}</span>
+                            <div class="edit-controls">
+                                <button class="btn-icon del" style="width:22px;height:22px;font-size:10px;border-radius:6px;" onclick="removeItem('skills',${i})"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="reveal mb-8">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-bold flex items-center gap-3" style="font-family:'Playfair Display','Cairo',serif;">
+                        <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent2),#f59e0b);display:inline-block;"></span>
+                        ${ui.achievements}
+                    </h2>
+                    <div class="edit-controls">
+                        <button class="btn-icon add" onclick="openAddItemModal('achievements')" title="${ui.addAch}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${d.achievements.map((ach, i) => `
+                        <div class="glass-card p-5 flex gap-4 items-start" data-section="achievements" data-index="${i}">
+                            <div class="ach-icon">
+                                <i class="fa-solid fa-${ach.icon || 'star'}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold mb-1" ${editAttr}="achievements.${i}.title">${escapeHtml(ach.title)}</h3>
+                                <p class="text-sm leading-relaxed" style="color:var(--muted);" ${editAttr}="achievements.${i}.desc">${escapeHtml(ach.desc)}</p>
+                                <div class="flex flex-wrap">
+                                    ${renderAchievementLinks(ach, ui)}
+                                </div>
+                            </div>
+                            <div class="edit-controls flex flex-col gap-2">
+                                <button class="btn-icon link" onclick="openEditLinksModal(${i})" title="${ui.editLinks}"><i class="fa-solid fa-link"></i></button>
+                                <button class="btn-icon del" onclick="removeItem('achievements',${i})"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="reveal mb-8">
+                <h2 class="text-xl font-bold flex items-center gap-3 mb-5" style="font-family:'Playfair Display','Cairo',serif;">
+                    <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent),var(--accent3));display:inline-block;"></span>
+                    ${ui.contact}
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="glass-card p-4 flex items-center gap-3">
+                        <div style="width:40px;height:40px;border-radius:12px;background:rgba(129,140,248,0.12);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <span class="text-sm truncate" ${editAttr}="contact.email">${escapeHtml(d.contact.email)}</span>
+                    </div>
+                    <div class="glass-card p-4 flex items-center gap-3">
+                        <div style="width:40px;height:40px;border-radius:12px;background:rgba(129,140,248,0.12);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <span class="text-sm truncate" ${editAttr}="contact.phone">${escapeHtml(d.contact.phone)}</span>
+                    </div>
+                    <div class="glass-card p-4 flex items-center gap-3">
+                        <div style="width:40px;height:40px;border-radius:12px;background:rgba(129,140,248,0.12);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <span class="text-sm truncate" ${editAttr}="contact.location">${escapeHtml(d.contact.location)}</span>
+                    </div>
+                    <div class="glass-card p-4 flex items-center gap-3">
+                        <div style="width:40px;height:40px;border-radius:12px;background:rgba(129,140,248,0.12);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </div>
+                        <span class="text-sm truncate" ${editAttr}="contact.linkedin">${escapeHtml(d.contact.linkedin)}</span>
+                    </div>
+                </div>
+            </section>
+
+            ${d.customSections.map((sec, i) => `
+                <section class="reveal mb-8 custom-section" data-section="customSections" data-index="${i}">
+                    <div class="flex items-center justify-between mb-5">
+                        <h2 class="text-xl font-bold flex items-center gap-3" style="font-family:'Playfair Display','Cairo',serif;">
+                            <span style="width:4px;height:28px;border-radius:2px;background:linear-gradient(to bottom,var(--accent2),#f59e0b);display:inline-block;"></span>
+                            <span ${editAttr}="customSections.${i}.title">${escapeHtml(sec.title)}</span>
+                        </h2>
+                        <div class="edit-controls">
+                            <button class="btn-icon del" onclick="removeItem('customSections',${i})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <div class="leading-relaxed" style="color:var(--muted);white-space:pre-wrap;" ${editAttr}="customSections.${i}.content" data-allow-newline>${escapeHtml(sec.content)}</div>
+                    </div>
+                </section>
+            `).join('')}
+
+            <div class="edit-controls reveal mb-16">
+                <button onclick="openSectionModal()" class="w-full py-4 rounded-2xl border-2 border-dashed font-bold text-base transition-all hover:border-solid" style="border-color:var(--card-border);color:var(--muted);background:transparent;cursor:pointer;font-family:inherit;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)';" onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--muted)';">
+                    <i class="fa-solid fa-plus" style="margin-inline-end:8px;"></i>
+                    ${ui.addSection}
+                </button>
+            </div>
+        `;
+    }
+
+    async function render() {
+        const ui = UI_TEXTS[currentLang];
+        const isRTL = currentLang === 'ar';
+        const dir = isRTL ? 'rtl' : 'ltr';
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = dir;
+        document.body.style.fontFamily = isRTL ? "'Cairo', sans-serif" : "'Outfit', sans-serif";
+
+        document.querySelectorAll('.lang-btn[data-lang]').forEach(b => {
+            b.classList.toggle('active', b.dataset.lang === currentLang);
+        });
+
+        document.querySelectorAll('[data-ui]').forEach(el => {
+            const key = el.dataset.ui;
+            if (ui[key]) el.textContent = ui[key];
+        });
+        document.querySelectorAll('[data-placeholder]').forEach(el => {
+            const key = el.dataset.placeholder;
+            if (ui[key]) el.placeholder = ui[key];
+        });
+
+        const main = document.getElementById('mainContent');
+
+        if (currentLang === 'ar') {
+            main.innerHTML = buildHTML(data.ar, ui, isRTL);
+            afterRender();
+        } else {
+            const overlay = document.getElementById('translationOverlay');
+            overlay.classList.add('show');
+            main.innerHTML = '';
+
+            try {
+                const translated = await getTranslatedData(currentLang);
+                main.innerHTML = buildHTML(translated, ui, isRTL);
+            } catch(e) {
+                console.error('Translation error:', e);
+                main.innerHTML = '<div class="translation-notice"><i class="fa-solid fa-triangle-exclamation"></i><span>تعذرت الترجمة، عرض المحتوى العربي</span></div>' + buildHTML(data.ar, ui, true);
+            } finally {
+                overlay.classList.remove('show');
+                afterRender();
+            }
+        }
+    }
+
+    function afterRender() {
+        const main = document.getElementById('mainContent');
+        main.classList.toggle('edit-mode', editMode && isAdmin && currentLang === 'ar');
+        document.body.classList.toggle('edit-active', editMode && isAdmin);
+        bindEditableEvents();
+
+        const avatarInput = document.getElementById('avatarInput');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        data.ar.avatar = ev.target.result;
+                        const img = document.getElementById('avatarImg');
+                        if (img) img.src = ev.target.result;
+                        saveData();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.reveal').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 60);
+            });
+        });
+    }
+
+    /* ========================================================
+       التحرير (للأدمن فقط وفي الوضع العربي)
+    ======================================================== */
+    function bindEditableEvents() {
+        document.querySelectorAll('[data-editable]').forEach(el => {
+            el.addEventListener('blur', function() {
+                if (!editMode || !isAdmin || currentLang !== 'ar') return;
+                const path = this.dataset.editable;
+                const value = this.textContent.trim();
+                setNestedValue(data.ar, path, value);
+                saveData();
+                invalidateTranslationCache(path);
+            });
+            if (!el.hasAttribute('data-allow-newline')) {
+                el.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            }
+        });
+    }
+
+    function invalidateTranslationCache(path) {
+        translationCache = {};
+        try { localStorage.removeItem('cvProTranslationCache_v3'); } catch(e) {}
+    }
+
+    function setNestedValue(obj, path, value) {
+        const parts = path.split('.');
+        let current = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+            current = current[parts[i]];
+        }
+        current[parts[parts.length - 1]] = value;
+    }
+
+    function removeItem(section, index) {
+        if (!isAdmin || currentLang !== 'ar') return;
+        data.ar[section].splice(index, 1);
+        invalidateTranslationCache();
+        render();
+        saveData();
+    }
+
+    /* ========================================================
+       نظام الأدمن: الدخول بكود
+    ======================================================== */
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    const adminCodeInput = document.getElementById('adminCodeInput');
+    const adminError = document.getElementById('adminError');
+
+    document.getElementById('brandLogo').addEventListener('click', function() {
+        if (isAdmin) {
+            // تسجيل خروج
+            isAdmin = false;
+            editMode = false;
+            document.body.classList.remove('admin-mode');
+            document.body.classList.remove('edit-active');
+            showToast(UI_TEXTS[currentLang].adminLogout, '');
+            render();
+        } else {
+            // فتح نافذة الدخول
+            adminCodeInput.value = '';
+            adminError.style.display = 'none';
+            adminLoginModal.classList.add('show');
+            setTimeout(() => adminCodeInput.focus(), 100);
+        }
+    });
+
+    document.getElementById('cancelAdmin').addEventListener('click', () => {
+        adminLoginModal.classList.remove('show');
+    });
+
+    function tryAdminLogin() {
+        const code = adminCodeInput.value;
+        if (code === ADMIN_CODE) {
+            isAdmin = true;
+            editMode = true;
+            document.body.classList.add('admin-mode');
+            document.body.classList.add('edit-active');
+            adminLoginModal.classList.remove('show');
+            // التبديل للعربية تلقائياً
+            if (currentLang !== 'ar') {
+                currentLang = 'ar';
+            }
+            showToast(UI_TEXTS.ar.adminWelcome, 'success');
+            render();
+        } else {
+            adminError.style.display = 'block';
+            adminCodeInput.value = '';
+            adminCodeInput.focus();
+            // اهتزاز
+            adminCodeInput.style.animation = 'none';
+            setTimeout(() => {
+                adminCodeInput.style.animation = '';
+            }, 10);
+        }
+    }
+
+    document.getElementById('confirmAdmin').addEventListener('click', tryAdminLogin);
+    adminCodeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') tryAdminLogin();
+    });
+
+    /* ========================================================
+       النوافذ المنبثقة
+    ======================================================== */
+    function openSectionModal() {
+        if (!isAdmin || currentLang !== 'ar') return;
+        document.getElementById('newSectionTitle').value = '';
+        document.getElementById('newSectionContent').value = '';
+        document.getElementById('addSectionModal').classList.add('show');
+    }
+
+    document.getElementById('cancelSection').addEventListener('click', () => {
+        document.getElementById('addSectionModal').classList.remove('show');
+    });
+
+    document.getElementById('confirmSection').addEventListener('click', () => {
+        const title = document.getElementById('newSectionTitle').value.trim();
+        const content = document.getElementById('newSectionContent').value.trim();
+        if (!title) return;
+        data.ar.customSections.push({ title, content });
+        invalidateTranslationCache();
+        document.getElementById('addSectionModal').classList.remove('show');
+        render();
+        saveData();
+    });
+
+    function openAddItemModal(section) {
+        if (!isAdmin || currentLang !== 'ar') return;
+        const ui = UI_TEXTS.ar;
+        const fields = document.getElementById('addItemFields');
+        let html = '';
+
+        if (section === 'experience') {
+            html = `
+                <div><label class="field-label">${ui.role}</label><input class="modal-input" data-field="role"></div>
+                <div><label class="field-label">${ui.company}</label><input class="modal-input" data-field="company"></div>
+                <div><label class="field-label">${ui.period}</label><input class="modal-input" data-field="period" placeholder="2020 - 2025"></div>
+                <div><label class="field-label">${ui.desc}</label><textarea class="modal-input" data-field="desc" rows="3" style="resize:vertical;"></textarea></div>
+            `;
+        } else if (section === 'education') {
+            html = `
+                <div><label class="field-label">${ui.degree}</label><input class="modal-input" data-field="degree"></div>
+                <div><label class="field-label">${ui.institution}</label><input class="modal-input" data-field="institution"></div>
+                <div><label class="field-label">${ui.period}</label><input class="modal-input" data-field="period" placeholder="2014 - 2024"></div>
+                <div><label class="field-label">${ui.desc}</label><textarea class="modal-input" data-field="desc" rows="3" style="resize:vertical;"></textarea></div>
+            `;
+        } else if (section === 'skills') {
+            html = `<div><label class="field-label">${ui.skillName}</label><input class="modal-input" data-field="name"></div>`;
+        } else if (section === 'achievements') {
+            html = `
+                <div><label class="field-label">${ui.achTitle}</label><input class="modal-input" data-field="title"></div>
+                <div><label class="field-label">${ui.achDesc}</label><textarea class="modal-input" data-field="desc" rows="3" style="resize:vertical;"></textarea></div>
+                <div><label class="field-label">${ui.videoUrlLabel}</label><input class="modal-input" data-field="videoUrl" placeholder="https://youtube.com/..." dir="ltr"></div>
+                <div><label class="field-label">${ui.videoLabelLabel}</label><input class="modal-input" data-field="videoLabel" placeholder="${ui.watchVideo}"></div>
+                <div><label class="field-label">${ui.articleUrlLabel}</label><input class="modal-input" data-field="articleUrl" placeholder="https://doi.org/..." dir="ltr"></div>
+                <div><label class="field-label">${ui.articleLabelLabel}</label><input class="modal-input" data-field="articleLabel" placeholder="${ui.readArticle}"></div>
+            `;
+        }
+
+        fields.innerHTML = html;
+        currentItemSection = section;
+        document.getElementById('addItemTitle').textContent =
+            section === 'experience' ? ui.addExp :
+            section === 'education' ? ui.addEdu :
+            section === 'skills' ? ui.addSkill :
+            ui.addAch;
+        document.getElementById('addItemModal').classList.add('show');
+    }
+
+    document.getElementById('cancelItem').addEventListener('click', () => {
+        document.getElementById('addItemModal').classList.remove('show');
+    });
+
+    document.getElementById('confirmItem').addEventListener('click', () => {
+        const fields = document.getElementById('addItemFields');
+        const section = currentItemSection;
+        const getVal = (name) => {
+            const el = fields.querySelector(`[data-field="${name}"]`);
+            return el ? el.value.trim() : '';
+        };
+
+        if (section === 'skills') {
+            const name = getVal('name');
+            if (!name) return;
+            data.ar.skills.push(name);
+        } else if (section === 'experience') {
+            const role = getVal('role');
+            if (!role) return;
+            data.ar.experience.push({
+                role, company: getVal('company'), period: getVal('period'), desc: getVal('desc')
+            });
+        } else if (section === 'education') {
+            const degree = getVal('degree');
+            if (!degree) return;
+            data.ar.education.push({
+                degree, institution: getVal('institution'), period: getVal('period'), desc: getVal('desc')
+            });
+        } else if (section === 'achievements') {
+            const title = getVal('title');
+            if (!title) return;
+            data.ar.achievements.push({
+                title, desc: getVal('desc'), icon: 'star',
+                videoUrl: getVal('videoUrl'), videoLabel: getVal('videoLabel'),
+                articleUrl: getVal('articleUrl'), articleLabel: getVal('articleLabel')
+            });
+        }
+
+        invalidateTranslationCache();
+        document.getElementById('addItemModal').classList.remove('show');
+        render();
+        saveData();
+    });
+
+    /* ========================================================
+       نافذة تعديل الروابط
+    ======================================================== */
+    function openEditLinksModal(index) {
+        if (!isAdmin || currentLang !== 'ar') return;
+        currentEditLinksIndex = index;
+        const ach = data.ar.achievements[index];
+        const ui = UI_TEXTS.ar;
+        document.getElementById('editVideoUrl').value = ach.videoUrl || '';
+        document.getElementById('editVideoLabel').value = ach.videoLabel || '';
+        document.getElementById('editVideoLabel').placeholder = ui.watchVideo;
+        document.getElementById('editArticleUrl').value = ach.articleUrl || '';
+        document.getElementById('editArticleLabel').value = ach.articleLabel || '';
+        document.getElementById('editArticleLabel').placeholder = ui.readArticle;
+        document.getElementById('editLinksModal').classList.add('show');
+    }
+
+    document.getElementById('cancelLinks').addEventListener('click', () => {
+        document.getElementById('editLinksModal').classList.remove('show');
+        currentEditLinksIndex = null;
+    });
+
+    document.getElementById('confirmLinks').addEventListener('click', () => {
+        if (currentEditLinksIndex === null) return;
+        const ach = data.ar.achievements[currentEditLinksIndex];
+        ach.videoUrl = document.getElementById('editVideoUrl').value.trim();
+        ach.videoLabel = document.getElementById('editVideoLabel').value.trim();
+        ach.articleUrl = document.getElementById('editArticleUrl').value.trim();
+        ach.articleLabel = document.getElementById('editArticleLabel').value.trim();
+        // مسح ذاكرة الترجمة لأن نصوص الروابط قد تكون تغيرت
+        invalidateTranslationCache();
+        document.getElementById('editLinksModal').classList.remove('show');
+        currentEditLinksIndex = null;
+        render();
+        saveData();
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+                if (this.id === 'editLinksModal') currentEditLinksIndex = null;
+            }
+        });
+    });
+
+    /* ========================================================
+       أزرار اللغة والتحرير
+    ======================================================== */
+    document.querySelectorAll('.lang-btn[data-lang]').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            if (this.dataset.lang === currentLang || isTranslating) return;
+            currentLang = this.dataset.lang;
+            await render();
+        });
+    });
+
+    document.getElementById('editToggle').addEventListener('click', async function() {
+        if (!isAdmin) return;
+        // التبديل للعربية تلقائياً عند تفعيل التحرير
+        if (currentLang !== 'ar' && !editMode) {
+            currentLang = 'ar';
+            await render();
+        }
+        editMode = !editMode;
+        document.body.classList.toggle('edit-active', editMode);
+        const main = document.getElementById('mainContent');
+        main.classList.toggle('edit-mode', editMode && currentLang === 'ar');
+        this.style.color = editMode ? 'var(--accent)' : 'var(--accent2)';
+        this.querySelector('[data-ui]').textContent = editMode ? UI_TEXTS[currentLang].saveBtn : UI_TEXTS[currentLang].editBtn;
+        if (!editMode) saveData();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+        const msg = currentLang === 'ar' ? 'هل أنت متأكد من إعادة تعيين جميع البيانات؟' :
+                    currentLang === 'fr' ? 'Êtes-vous sûr de réinitialiser toutes les données ?' :
+                    'Are you sure you want to reset all data?';
+        if (confirm(msg)) resetData();
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    /* ========================================================
+       الجسيمات المتحركة
+    ======================================================== */
+    function createParticles() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 18; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 3 + 1;
+            const colors = ['rgba(129,140,248,0.35)', 'rgba(251,191,36,0.3)', 'rgba(196,181,253,0.3)'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            p.style.cssText = `
+                width: ${size}px; height: ${size}px;
+                left: ${Math.random() * 100}%;
+                background: ${color};
+                animation-duration: ${Math.random() * 20 + 18}s;
+                animation-delay: ${Math.random() * 15}s;
+            `;
+            container.appendChild(p);
+        }
+    }
+
+    // بدء التشغيل
+    loadData();
+    render();
+    createParticles();
+    </script>
+</body>
+</html>
