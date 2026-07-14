@@ -293,7 +293,7 @@
 
         @media print {
             .top-bar, .edit-controls, .avatar-edit, .bg-scene, .bg-grid, .toast, #particles,
-            .translation-overlay, .translation-notice, .admin-badge { display: none !important; }
+            .translation-overlay, .translation-notice, .admin-badge, .cloud-status { display: none !important; }
             body { background: white !important; color: #111 !important; }
             .glass-card { border-color: #ddd !important; background: #fafafa !important; box-shadow: none !important; transform: none !important; }
             .glass-card::before { display: none !important; }
@@ -403,9 +403,35 @@
         }
         body.admin-mode .admin-badge { display: inline-flex; }
 
-        /* زر التعديل مخفي افتراضياً، يظهر فقط في وضع الأدمن */
-        #editToggle, #resetBtn { display: none !important; }
-        body.admin-mode #editToggle { display: inline-flex !important; }
+        .cloud-status {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 12px; border-radius: 8px;
+            font-size: 11px; font-weight: 600;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--card-border);
+            color: var(--muted);
+        }
+        .cloud-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--muted);
+            transition: all 0.3s;
+        }
+        .cloud-status.connected .cloud-dot {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(52,211,153,0.6);
+        }
+        .cloud-status.connected { color: var(--success); }
+        .cloud-status.disconnected .cloud-dot {
+            background: var(--danger);
+        }
+        .cloud-status.disconnected { color: var(--danger); }
+        .cloud-status.local-only .cloud-dot {
+            background: var(--accent2);
+        }
+        .cloud-status.local-only { color: var(--accent2); }
+
+        /* زر إعادة التعيين يظهر فقط في وضع الأدمن */
+        #resetBtn { display: none !important; }
         body.admin-mode.edit-active #resetBtn { display: inline-flex !important; }
 
         @media (prefers-reduced-motion: reduce) {
@@ -433,15 +459,15 @@
                 <span class="brand-logo-text">CV Pro</span>
                 <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Admin</span>
             </div>
+
             <div class="flex items-center gap-2 flex-wrap">
                 <button class="lang-btn active" data-lang="ar">العربية</button>
                 <button class="lang-btn" data-lang="fr">Français</button>
                 <button class="lang-btn" data-lang="en">English</button>
                 <div style="width:1px;height:24px;background:var(--card-border);margin:0 6px;"></div>
-                <button id="editToggle" class="lang-btn" style="color:var(--accent2);">
-                    <i class="fa-solid fa-pen-to-square" style="margin-inline-end:4px;"></i>
-                    <span data-ui="editBtn">تعديل</span>
-                </button>
+
+
+
                 <button id="printBtn" class="lang-btn" title="طباعة">
                     <i class="fa-solid fa-print"></i>
                 </button>
@@ -527,6 +553,21 @@
     const ADMIN_CODE = "procvmedso04@";
 
     /* ========================================================
+       إعدادات التخزين السحابي (JSONBin.io)
+       يجب تعبئتها بعد إنشاء حساب على jsonbin.io
+       دليل الإعداد:
+       1. اذهب إلى https://jsonbin.io و أنشئ حساب مجاني
+       2. من Account Settings > API Keys، انسخ "Master Key" (X-Master-Key)
+       3. اضغط "Create a Bin" والصق بيانات JSON فارغة: {"ar": null}
+       4. من صفحة الـ Bin، انسخ "Bin ID" من الـ URL أو من زر "Bin ID"
+       5. الصق المفاتيح أدناه بدل العناوين النائبة
+       ملاحظة: إذا تركت القيم كما هي، سيعمل الموقع بـ localStorage فقط
+    ======================================================== */
+    const JSONBIN_API_KEY = "PASTE_YOUR_MASTER_KEY_HERE";  // استبدل هذا
+    const JSONBIN_BIN_ID = "PASTE_YOUR_BIN_ID_HERE";       // استبدل هذا
+    const JSONBIN_ENABLED = JSONBIN_API_KEY !== "PASTE_YOUR_MASTER_KEY_HERE" && JSONBIN_BIN_ID !== "PASTE_YOUR_BIN_ID_HERE";
+
+    /* ========================================================
        البيانات الأساسية - بالعربية فقط
     ======================================================== */
     const DEFAULT_DATA_AR = {
@@ -550,50 +591,64 @@
                 title: "براءة اختراع وطنية مسلمة من المركز الوطني للملكية الفكرية INAPI تحت رقم 11637",
                 desc: "جهاز قياس الإشعاع الشمسي حسب الاتجاهات والميلانات المختلفة.",
                 icon: "trophy",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "https://drive.google.com/file/d/17GOy_qg-PVlGpxh6Vs4wtvXESSck5dF_/view?usp=sharing",
+                videoLabel: "شاهد العرض التوضيحي",
+                articleUrl: "https://drive.google.com/file/d/1EBzttxiPNc--nnUxihsjyy_bDKRG6zni/view?usp=sharing",
+                articleLabel: "وثيقة الاختراع"
             },
             {
                 title: "4 شهادات مشروع مبتكر مسلمة من وزارة المؤسسات الناشئة واقتصاد المعرفة - الجزائر",
                 desc: "جهاز قياس وتخزين قيم درجة الحرارة DMST1.0، جهاز محلل كمي ونوعي للناقلية الحرارية للمواد الصلبة والمعادن، جهاز دراسة الخصائص الحرارية لمواد البناء متصل بحاسوب، نظام مضاد للسرقة للمركبات والشاحنات، دعامة قرآنية تفاعلية مع تفسير صوتي مخصصة للمكفوفين والمبصرين. تحت الأرقام التسلسلية: 0804212080 – 2106212198 – 2705212153 – 2607212229 – 1702522295.",
                 icon: "certificate",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "https://www.youtube.com/watch?v=V3-Nofkm1DM",
+                videoLabel: "شاهد العرض التوضيحي",
+                articleUrl: "https://drive.google.com/file/d/19hQYvAaoP9fVxyZrhrPxVTd2zR6ctfd4/view?usp=sharing",
+                articleLabel: "وثيقة علامات المشاريع المبتكرة"
             },
             {
                 title: "مقال في مجلة علمية عالمية (JREE)",
                 desc: "دراسة تجريبية حول تأثير اتجاه وميلان السطح على الإشعاع الشمسي الساقط وتطبيقه على المباني.",
                 icon: "rocket",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "",
+                videoLabel: "",
+                articleUrl: "https://www.jree.ir/article_173464_78743236cc7bb82311f66aac97bd6e9f.pdf",
+                articleLabel: "اقرأ المقال الكامل"
             },
             {
                 title: "مقال في مجلة علمية عالمية (RE&PQJ)",
                 desc: "تأثير مواد البناء على تطور درجة الحرارة داخل المباني في الجزائر.",
                 icon: "rocket",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "",
+                videoLabel: "",
+                articleUrl: "https://www.reepqj.com/icrepq20/253-20-hadji.pdf",
+                articleLabel: "اقرأ المقال الكامل"
             },
             {
                 title: "نشر بحث على منصة (IEEE)",
                 desc: "تأثير الإشعاع الشمسي على درجة حرارة جدران المنازل المواجهة للاتجاهات الأربعة في فصل الصيف في أولاد سيدي إبراهيم (الجزائر).",
                 icon: "code-branch",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "",
+                videoLabel: "",
+                articleUrl: "https://ieeexplore.ieee.org/abstract/document/10002121",
+                articleLabel: "تحميل المقال"
             },
             {
                 title: "نشر فصل في كتاب (Trends in Renewable Energy and Power Quality) إصدار جامعة كامبريدج 2024",
                 desc: "الفصل الرابع والثلاثون: تأثير مواد البناء على تطور درجة الحرارة الداخلية في الجزائر.",
                 icon: "code-branch",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "",
+                videoLabel: "",
+                articleUrl: "https://drive.google.com/file/d/11_cWakBFO3uvExL6DyStfMsWvhYD89Te/view?usp=sharing",
+                articleLabel: "فهرس الكتاب"
             },
             {
                 title: "المشاركات الدولية",
                 desc: "المشاركة في 4 ملتقيات دولية: المؤتمر الدولي الثالث عشر للطاقة المتجددة (IREC 2022)، الدورة السابعة للمؤتمر الدولي في العلوم الحرارية (AMT 2022)، المؤتمر العربي الثاني في الميكانيك والهندسة (ARCME 2023)، اللقاء الدولي حول التبريد والطاقة والبيئة (IREEC 2).",
                 icon: "globe",
-                videoUrl: "", videoLabel: "",
-                articleUrl: "", articleLabel: ""
+                videoUrl: "",
+                videoLabel: "",
+                articleUrl: "https://drive.google.com/file/d/13Hi1ZN-uUvQbPIW592QlP4xMtZI2VomY/view?usp=sharing",
+                articleLabel: "شهادات المشاركة"
             }
         ],
         contact: { email: "hammach0408@gmail.com", phone: "+213 793 192 504 / +213 784 373 784", location: "بوسعادة - المسيلة - الجزائر", linkedin: "linkedin.com/in/dr-chouidira-mohamed-6963603a3" },
@@ -706,43 +761,189 @@
     let translationCache = {};
 
     /* ========================================================
+       التخزين السحابي (JSONBin.io)
+       - loadDataFromCloud: يقرأ البيانات من السحابة (مشتركة لكل الزوار)
+       - saveDataToCloud: يكتب البيانات إلى السحابة (للأدمن فقط)
+    ======================================================== */
+    async function loadDataFromCloud() {
+        if (!JSONBIN_ENABLED) return null;
+        try {
+            const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`;
+            const response = await fetch(url, {
+                headers: { 'X-Master-Key': JSONBIN_API_KEY }
+            });
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            const json = await response.json();
+            console.log('[CV Pro] loadDataFromCloud: تم تحميل البيانات من السحابة');
+            return json.record;
+        } catch(e) {
+            console.error('[CV Pro] loadDataFromCloud: فشل:', e.message);
+            return null;
+        }
+    }
+
+    async function saveDataToCloud(dataObj) {
+        if (!JSONBIN_ENABLED) return false;
+        try {
+            const url = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify(dataObj)
+            });
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            console.log('[CV Pro] saveDataToCloud: تم حفظ البيانات في السحابة');
+            return true;
+        } catch(e) {
+            console.error('[CV Pro] saveDataToCloud: فشل:', e.message);
+            return false;
+        }
+    }
+
+    /* ========================================================
        إدارة البيانات
     ======================================================== */
-    function loadData() {
-        const saved = localStorage.getItem('cvProData_v5');
+    // دمج الروابط المبرمجة من DEFAULT_DATA_AR في البيانات المحفوظة
+    // هذا يضمن أن الروابط المبرمجة تظهر دائماً حتى لو كانت البيانات المحفوظة قديمة
+    function mergeHardcodedLinks(savedData) {
+        if (!savedData || !savedData.ar || !savedData.ar.achievements) return savedData;
+        if (!DEFAULT_DATA_AR.achievements) return savedData;
+        
+        savedData.ar.achievements.forEach((ach, i) => {
+            const defaultAch = DEFAULT_DATA_AR.achievements[i];
+            if (defaultAch) {
+                // إذا كان الإنجاز في البيانات الافتراضية يحتوي على رابط، استخدمه
+                if (defaultAch.videoUrl) ach.videoUrl = defaultAch.videoUrl;
+                if (defaultAch.videoLabel) ach.videoLabel = defaultAch.videoLabel;
+                if (defaultAch.articleUrl) ach.articleUrl = defaultAch.articleUrl;
+                if (defaultAch.articleLabel) ach.articleLabel = defaultAch.articleLabel;
+            }
+        });
+        return savedData;
+    }
+
+    async function loadData() {
+        // 1. محاولة القراءة من السحابة أولاً
+        let cloudData = null;
+        if (JSONBIN_ENABLED) {
+            cloudData = await loadDataFromCloud();
+            if (cloudData && cloudData.ar) {
+                cloudData = mergeHardcodedLinks(cloudData);
+                data = { ar: cloudData.ar };
+                console.log('[CV Pro] loadData: تم تحميل البيانات من السحابة (مشتركة)');
+                // طباعة الإنجازات مع روابطها للتشخيص
+                if (data.ar.achievements) {
+                    data.ar.achievements.forEach((ach, i) => {
+                        if (ach.videoUrl || ach.articleUrl) {
+                            console.log('[CV Pro] loadData: الإنجاز #' + i + ' يحتوي على روابط:', {
+                                title: ach.title,
+                                videoUrl: ach.videoUrl,
+                                articleUrl: ach.articleUrl
+                            });
+                        }
+                    });
+                }
+                // حفظ نسخة محلية كـ cache
+                try {
+                    localStorage.setItem('cvProData_v6', JSON.stringify({ ar: data.ar }));
+                } catch(e) {}
+                // تطبيق البيانات
+                applyDataDefaults();
+                // تحميل ذاكرة الترجمة
+                loadTranslationCacheFromStorage();
+                return;
+            }
+        }
+
+        // 2. fallback إلى localStorage
+        let saved = localStorage.getItem('cvProData_v6');
+        if (!saved) {
+            saved = localStorage.getItem('cvProData_v6_backup');
+            if (saved) console.log('[CV Pro] loadData: تم استخدام النسخة الاحتياطية المحلية');
+        }
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 if (parsed.ar) {
-                    data = { ar: parsed.ar };
+                    const merged = mergeHardcodedLinks(parsed);
+                    data = { ar: merged.ar };
+                    console.log('[CV Pro] loadData: تم تحميل البيانات من localStorage (مع دمج الروابط المبرمجة)');
                 } else {
                     data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
                 }
             } catch(e) {
+                console.error('[CV Pro] loadData: خطأ في التحليل، استخدام الافتراضي:', e);
                 data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
             }
         } else {
+            console.log('[CV Pro] loadData: لا توجد بيانات محفوظة، استخدام الافتراضي');
             data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
         }
+        applyDataDefaults();
+        loadTranslationCacheFromStorage();
+    }
+
+    function applyDataDefaults() {
         if (!data.ar.customSections) data.ar.customSections = [];
-        // التأكد من وجود حقول الروابط في كل إنجاز
         if (data.ar.achievements) {
             data.ar.achievements.forEach(ach => {
-                if (!ach.videoUrl) ach.videoUrl = '';
-                if (!ach.videoLabel) ach.videoLabel = '';
-                if (!ach.articleUrl) ach.articleUrl = '';
-                if (!ach.articleLabel) ach.articleLabel = '';
+                if (ach.videoUrl === undefined || ach.videoUrl === null) ach.videoUrl = '';
+                if (ach.videoLabel === undefined || ach.videoLabel === null) ach.videoLabel = '';
+                if (ach.articleUrl === undefined || ach.articleUrl === null) ach.articleUrl = '';
+                if (ach.articleLabel === undefined || ach.articleLabel === null) ach.articleLabel = '';
             });
         }
+    }
 
+    function loadTranslationCacheFromStorage() {
         try {
             const cacheStr = localStorage.getItem('cvProTranslationCache_v3');
             if (cacheStr) translationCache = JSON.parse(cacheStr);
         } catch(e) { translationCache = {}; }
     }
 
-    function saveData() {
-        localStorage.setItem('cvProData_v5', JSON.stringify({ ar: data.ar }));
+    async function saveData() {
+        try {
+            const payload = JSON.stringify({ ar: data.ar });
+            // 1. حفظ محلي دائماً (كـ cache + احتياطي)
+            localStorage.setItem('cvProData_v6', payload);
+            try {
+                localStorage.setItem('cvProData_v6_backup', payload);
+            } catch(e2) {}
+            console.log('[CV Pro] saveData: تم الحفظ محلياً. حجم البيانات:', payload.length, 'بايت');
+
+            // 2. حفظ في السحابة (مشترك بين كل الزوار)
+            if (JSONBIN_ENABLED) {
+                const cloudResult = await saveDataToCloud({ ar: data.ar });
+                if (cloudResult) {
+                    showToast('تم الحفظ في السحابة', 'success');
+                } else {
+                    showToast('تم الحفظ محلياً فقط (السحابة غير متاحة)', 'error');
+                }
+            }
+
+            // التحقق من الروابط المحفوظة
+            if (data.ar.achievements) {
+                data.ar.achievements.forEach((ach, i) => {
+                    if (ach.videoUrl || ach.articleUrl) {
+                        console.log('[CV Pro] saveData: الإنجاز #' + i + ' لديه روابط:', {
+                            videoUrl: ach.videoUrl,
+                            articleUrl: ach.articleUrl
+                        });
+                    }
+                });
+            }
+        } catch(e) {
+            console.error('[CV Pro] saveData: فشل الحفظ:', e);
+            showToast('فشل الحفظ: ' + e.message, 'error');
+        }
     }
 
     function saveTranslationCache() {
@@ -756,7 +957,7 @@
     }
 
     function resetData() {
-        localStorage.removeItem('cvProData_v5');
+        localStorage.removeItem('cvProData_v6');
         localStorage.removeItem('cvProTranslationCache_v3');
         translationCache = {};
         data = { ar: JSON.parse(JSON.stringify(DEFAULT_DATA_AR)) };
@@ -933,18 +1134,31 @@
         return div.innerHTML;
     }
 
+    // تحويل رابط Google Drive من /view?usp=sharing إلى معاينة مباشرة
+    function optimizeGoogleDriveUrl(url) {
+        // استخراج ID الملف من رابط Google Drive
+        const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (match) {
+            const fileId = match[1];
+            // استخدام رابط المعاينة المباشرة
+            return 'https://drive.google.com/file/d/' + fileId + '/preview';
+        }
+        return url;
+    }
+
     function renderAchievementLinks(ach, ui) {
         let html = '';
         if (ach.videoUrl && ach.videoUrl.trim()) {
-            const url = ach.videoUrl.trim();
+            let url = ach.videoUrl.trim();
             const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-            const icon = isYouTube ? 'fa-youtube' : 'fa-play';
+            const isGoogleDrive = url.includes('drive.google.com');
+            const icon = isYouTube ? 'fa-youtube' : (isGoogleDrive ? 'fa-google-drive' : 'fa-play');
             // استخدام النص المخصص إن وجد، وإلا استخدام النص الافتراضي
             let label = ach.videoLabel && ach.videoLabel.trim() ? ach.videoLabel : ui.watchVideo;
             html += `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="link-btn video"><i class="fa-brands ${icon}"></i><span>${escapeHtml(label)}</span></a>`;
         }
         if (ach.articleUrl && ach.articleUrl.trim()) {
-            const url = ach.articleUrl.trim();
+            let url = ach.articleUrl.trim();
             let label = ach.articleLabel && ach.articleLabel.trim() ? ach.articleLabel : ui.readArticle;
             html += `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="link-btn article"><i class="fa-solid fa-file-lines"></i><span>${escapeHtml(label)}</span></a>`;
         }
@@ -1235,11 +1449,11 @@
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(ev) {
+                    reader.onload = async function(ev) {
                         data.ar.avatar = ev.target.result;
                         const img = document.getElementById('avatarImg');
                         if (img) img.src = ev.target.result;
-                        saveData();
+                        await saveData();
                     };
                     reader.readAsDataURL(file);
                 }
@@ -1258,12 +1472,12 @@
     ======================================================== */
     function bindEditableEvents() {
         document.querySelectorAll('[data-editable]').forEach(el => {
-            el.addEventListener('blur', function() {
+            el.addEventListener('blur', async function() {
                 if (!editMode || !isAdmin || currentLang !== 'ar') return;
                 const path = this.dataset.editable;
                 const value = this.textContent.trim();
                 setNestedValue(data.ar, path, value);
-                saveData();
+                await saveData();
                 invalidateTranslationCache(path);
             });
             if (!el.hasAttribute('data-allow-newline')) {
@@ -1291,12 +1505,12 @@
         current[parts[parts.length - 1]] = value;
     }
 
-    function removeItem(section, index) {
+    async function removeItem(section, index) {
         if (!isAdmin || currentLang !== 'ar') return;
         data.ar[section].splice(index, 1);
         invalidateTranslationCache();
         render();
-        saveData();
+        await saveData();
     }
 
     /* ========================================================
@@ -1373,7 +1587,7 @@
         document.getElementById('addSectionModal').classList.remove('show');
     });
 
-    document.getElementById('confirmSection').addEventListener('click', () => {
+    document.getElementById('confirmSection').addEventListener('click', async () => {
         const title = document.getElementById('newSectionTitle').value.trim();
         const content = document.getElementById('newSectionContent').value.trim();
         if (!title) return;
@@ -1381,7 +1595,7 @@
         invalidateTranslationCache();
         document.getElementById('addSectionModal').classList.remove('show');
         render();
-        saveData();
+        await saveData();
     });
 
     function openAddItemModal(section) {
@@ -1431,7 +1645,7 @@
         document.getElementById('addItemModal').classList.remove('show');
     });
 
-    document.getElementById('confirmItem').addEventListener('click', () => {
+    document.getElementById('confirmItem').addEventListener('click', async () => {
         const fields = document.getElementById('addItemFields');
         const section = currentItemSection;
         const getVal = (name) => {
@@ -1468,7 +1682,7 @@
         invalidateTranslationCache();
         document.getElementById('addItemModal').classList.remove('show');
         render();
-        saveData();
+        await saveData();
     });
 
     /* ========================================================
@@ -1493,19 +1707,61 @@
         currentEditLinksIndex = null;
     });
 
-    document.getElementById('confirmLinks').addEventListener('click', () => {
-        if (currentEditLinksIndex === null) return;
-        const ach = data.ar.achievements[currentEditLinksIndex];
-        ach.videoUrl = document.getElementById('editVideoUrl').value.trim();
-        ach.videoLabel = document.getElementById('editVideoLabel').value.trim();
-        ach.articleUrl = document.getElementById('editArticleUrl').value.trim();
-        ach.articleLabel = document.getElementById('editArticleLabel').value.trim();
-        // مسح ذاكرة الترجمة لأن نصوص الروابط قد تكون تغيرت
+    document.getElementById('confirmLinks').addEventListener('click', async () => {
+        if (currentEditLinksIndex === null) {
+            console.warn('[CV Pro] confirmLinks: لا يوجد فهرس محدد');
+            return;
+        }
+        const idx = currentEditLinksIndex;
+        const ach = data.ar.achievements[idx];
+        if (!ach) {
+            console.error('[CV Pro] الإنجاز غير موجود:', idx);
+            return;
+        }
+        // قراءة القيم من الحقول
+        const videoUrl = document.getElementById('editVideoUrl').value.trim();
+        const videoLabel = document.getElementById('editVideoLabel').value.trim();
+        const articleUrl = document.getElementById('editArticleUrl').value.trim();
+        const articleLabel = document.getElementById('editArticleLabel').value.trim();
+
+        // تطبيق القيم على البيانات
+        ach.videoUrl = videoUrl;
+        ach.videoLabel = videoLabel;
+        ach.articleUrl = articleUrl;
+        ach.articleLabel = articleLabel;
+
+        console.log('[CV Pro] تم تحديث الإنجاز #' + idx + ':', {
+            title: ach.title,
+            videoUrl: ach.videoUrl,
+            videoLabel: ach.videoLabel,
+            articleUrl: ach.articleUrl,
+            articleLabel: ach.articleLabel
+        });
+
+        // الحفظ أولاً قبل أي شيء آخر لضمان عدم فقدان البيانات
+        await saveData();
+        // التحقق من الحفظ
+        const saved = localStorage.getItem('cvProData_v6');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                const savedAch = parsed.ar && parsed.ar.achievements && parsed.ar.achievements[idx];
+                if (savedAch) {
+                    console.log('[CV Pro] تم التحقق من الحفظ. videoUrl في التخزين:', savedAch.videoUrl);
+                }
+            } catch(e) {
+                console.error('[CV Pro] خطأ في التحقق من الحفظ:', e);
+            }
+        }
+        // مسح ذاكرة الترجمة
         invalidateTranslationCache();
+        // إغلاق النافذة
         document.getElementById('editLinksModal').classList.remove('show');
         currentEditLinksIndex = null;
+        // إعادة العرض
         render();
-        saveData();
+        // تأكيد بصري للمستخدم
+        showToast(UI_TEXTS[currentLang].saved || 'تم الحفظ', 'success');
     });
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -1528,21 +1784,6 @@
         });
     });
 
-    document.getElementById('editToggle').addEventListener('click', async function() {
-        if (!isAdmin) return;
-        // التبديل للعربية تلقائياً عند تفعيل التحرير
-        if (currentLang !== 'ar' && !editMode) {
-            currentLang = 'ar';
-            await render();
-        }
-        editMode = !editMode;
-        document.body.classList.toggle('edit-active', editMode);
-        const main = document.getElementById('mainContent');
-        main.classList.toggle('edit-mode', editMode && currentLang === 'ar');
-        this.style.color = editMode ? 'var(--accent)' : 'var(--accent2)';
-        this.querySelector('[data-ui]').textContent = editMode ? UI_TEXTS[currentLang].saveBtn : UI_TEXTS[currentLang].editBtn;
-        if (!editMode) saveData();
-    });
 
     document.getElementById('resetBtn').addEventListener('click', function() {
         const msg = currentLang === 'ar' ? 'هل أنت متأكد من إعادة تعيين جميع البيانات؟' :
@@ -1576,9 +1817,12 @@
     }
 
     // بدء التشغيل
-    loadData();
-    render();
-    createParticles();
+    (async () => {
+        await loadData();
+        await render();
+        createParticles();
+        console.log('[CV Pro] تم بدء التشغيل. البيانات الحالية:', data.ar);
+    })();
     </script>
 </body>
 </html>
